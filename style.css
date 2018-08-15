@@ -36,7 +36,7 @@
 
 .del {
      width: 30px;
-    /* height: 30px; */ 
+    height: 30px; 
     margin-right: 20px;
     padding: 0;
     opacity: 0;
@@ -50,6 +50,9 @@
     color: red;
     opacity: 1;
     transition: 0.05s ease-out 0.1s;
+    border:  1px solid black;
+    box-sizing: border-box;
+    background: gray;
 }
 
 .section:hover * { 
@@ -57,14 +60,27 @@
     cursor: pointer;
 }
 
+.label {
+    max-width: 200px;
+}
+
 .border:hover {
     border: 1px solid red;
+}
+
+.border label:hover {
+    
     cursor: pointer;
     margin: -1px;
 }
 
-.span {
+.border span {
     cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+.borer span:hover {
+    
 }
 
 .check-change {

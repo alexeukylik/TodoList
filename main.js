@@ -1,6 +1,4 @@
-const todoList = new TodoList();
-// const task = new Task('HTML');
-// task.onDeleteCallback = this._onTaskDeleted.bind(this);
-console.log(todoList);
+const serviceDal = new Service();  //create DALL
+const todoList = new TodoList(serviceDal);
 todoList.render();
 
