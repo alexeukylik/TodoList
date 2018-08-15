@@ -23,7 +23,9 @@ class TodoList {
     _startTaskAddServer(taskOutServer) {
         // debugger;
         taskOutServer.map((item)=>{
-           return this._tasks.push(new Task(item.title, item.id, item.done)); 
+            var task = new Task(item.title, item.id, item.done);
+            //task/callva = ''dfdsf
+           return this._tasks.push(task); 
         })
 
         console.log(this._tasks);
@@ -32,7 +34,7 @@ class TodoList {
 
     _startTaskPutServer(task) {
         // debugger;
-        todoList.service.put(this.widgetId, task.id, task.name, task.isDone)
+        this.service.put(this.widgetId, task.id, task.name, task.isDone)
         .then();
     }
 
@@ -122,16 +124,12 @@ class TodoList {
         let tasksForRender = this._tasks;
 
         if (this.filterMode == 'active') {
-            tasksForRender = tasksForRender.filter((item) => {
+            tasksForRender = tasksForRender.filter((item, i, arr) => {
                 return !item.isDone;
-            });
-        } else if(this.filterMode == 'all') {
-            tasksForRender = tasksForRender.filter((item)=> {
-                return item;
-            });
+            })
         } else if(this.filterMode == 'completed'){
             tasksForRender = tasksForRender.filter((item)=>{
-                return !item;
+                return item.isDone;
             })
         };
 
@@ -142,15 +140,17 @@ class TodoList {
 
             // debugger;
             this.tasksBlock.append(item.render()); // render tasks
+            // todo: move to task createion place
             item._onTaskDeleted1 = this._onTaskDeleted.bind(this); //call
             // bind on isDone task
             item._items_left = this._items_left.bind(this);
             // bind on updata task put
             item._startPut = this._startTaskPutServer.bind(this);
 
-            this.count++;
-            if(item.checked1.checked) {
-                this.count--;
+            
+            // 
+            if(!item.isDone) {
+                this.count++;
             }
             
         }
