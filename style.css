@@ -3,26 +3,35 @@
 }
 
 .wrap {
+	display: flex;
+	flex-direction: column;
     width: 500px;
     /* min-height: 300px; */
     background: rgb(158, 219, 247);
     margin: 0 auto;
 }
 
-.wrap .head p {
+.wrap p {
     padding: 20px 0 0 30px;
 }
 
 .input {
+	height: 18px;
     width: 200px;
-    margin-left:30px; 
+	margin-left:30px; 
+	padding: 5px 0 5px 0;
+}
+.head {
+	position: relative;
+	display: flex;
 }
 
 .btn {
+	width: 30px;
+	height: 30px;
     margin-left: 20px;
     border-radius: 50%;
     font-size: 18px;
-    box-sizing: border-box;
 }
 
 .section {
@@ -30,9 +39,6 @@
     margin: 15px;
 }
 
-.border {
-    min-width: 400px;
-}
 
 .del {
      width: 30px;
@@ -61,31 +67,34 @@
 }
 
 .label {
-    max-width: 200px;
+	max-width: 200px;
+	
+}
+
+.border {
+	min-width: 400px;
+	border: 1px solid transparent;	
 }
 
 .border:hover {
-    border: 1px solid red;
+	border: 1px solid red;
+
 }
 
-.border label:hover {
-    
+.border label:hover {    
     cursor: pointer;
-    margin: -1px;
+	box-sizing: border-box;	
 }
 
 .border span {
     cursor: pointer;
-    width: 20px;
+    width: 60px;
     height: 20px;
-}
-.borer span:hover {
-    
 }
 
 .check-change {
     opacity: 0.5;
-    text-decoration: line-through; 
+	text-decoration: line-through; 	
 }
 
 .menu-bottom {
@@ -101,3 +110,116 @@
     text-align: center;
     cursor: pointer;
 }
+
+/* lodinig */
+
+.windows8 {
+	display: none;
+	z-index: 2;
+	top: 7px;
+	right: 215px;
+	position: absolute;
+	width: 20px;
+	height:20px;
+	margin:auto;
+}
+
+.windows8 .wBall {
+	position: absolute;
+	width: 15px;
+	height: 15px;
+	opacity: 0;
+	transform: rotate(225deg);		
+	animation: orbit 3.96s infinite;		
+}
+
+.windows8 .wBall .wInnerBall{
+	position: absolute;
+	width: 3px;
+	height: 3px;
+	background: rgba(214, 22, 70, 0.521);
+	left:0px;
+	top:0px;
+	border-radius: 10px;
+}
+
+.windows8 #wBall_1 {
+	animation-delay: 0.7s;
+		
+}
+
+.windows8 #wBall_2 {
+	animation-delay: 0.2s;
+		
+}
+
+.windows8 #wBall_3 {
+	animation-delay: 0.4s;
+		
+}
+
+.windows8 #wBall_4 {
+	animation-delay: 0.2s;
+		
+}
+
+.windows8 #wBall_5 {
+	animation-delay: 0.6s;
+		
+}
+
+
+@keyframes orbit {
+	0% {
+		opacity: 1;
+		z-index:99;
+		transform: rotate(180deg);
+		animation-timing-function: ease-out;
+	}
+
+	7% {
+		opacity: 1;
+		transform: rotate(300deg);
+		animation-timing-function: linear;
+		origin:0%;
+	}
+
+	30% {
+		opacity: 1;
+		transform:rotate(410deg);
+		animation-timing-function: ease-in-out;
+		origin:7%;
+	}
+
+	39% {
+		opacity: 1;
+		transform: rotate(645deg);
+		animation-timing-function: linear;
+		origin:30%;
+	}
+
+	70% {
+		opacity: 1;
+		transform: rotate(770deg);
+		animation-timing-function: ease-out;
+		origin:39%;
+	}
+
+	75% {
+		opacity: 1;
+		transform: rotate(900deg);
+		animation-timing-function: ease-out;
+		origin:70%;
+	}
+
+	76% {
+	opacity: 0;
+		transform:rotate(900deg);
+	}
+
+	100% {
+	opacity: 0;
+		transform: rotate(900deg);
+	}
+}
+

@@ -1,5 +1,5 @@
 class TodoList {
-    constructor(service) {
+    constructor(service, visual) {
         // debugger;
         this._tasks = []; //new Task('number1'), new Task('number2')
         this._el = null; // wrap aplication
@@ -10,28 +10,37 @@ class TodoList {
         this.count = 0; // counter tasks
         this.items_left = null;
         this.filterMode = null;
+        this.loder = null;
         this.widgetId = 333;
+        this.flag = false;
         this.service = service;  //create DALL
+        this.visual = visual; //visual effect
 
         // сallback on get responce
         this.service.pushAddServerCallback = this._startTaskAddServer.bind(this);
         this.service.get(this.widgetId);
 
-    };    
+    };
 
     // task on server callback get responce
     _startTaskAddServer(taskOutServer) {
-        taskOutServer.map((item)=>{
-            let task = new Task(item.title, item.id, item.done);
-           return this._tasks.push(task); 
+        taskOutServer.map((item) => {
+            const task = new Task(item.title, item.id, item.done);
+            // callback on delete task
+            task._onTaskDeletedchild = this._onTaskDeleted.bind(this);
+            // calback on isDone task
+            task._items_left = this._items_left.bind(this);
+            // calback on updata task put
+            task._startPut = this._startTaskPutServer.bind(this);
+            return this._tasks.push(task);
         })
 
-        this._renderTasks(); 
+        this._renderTasks();
     }
 
     _startTaskPutServer(task) {
         this.service.put(this.widgetId, task.id, task.name, task.isDone)
-        .then();
+            .then();
     }
 
     render() {
@@ -40,36 +49,53 @@ class TodoList {
     };
 
     _addTask(event) {
-        // debugger;
-        //stoped updeat
+        //stoped update
         event.preventDefault();
+        // debugger;
+        // visual effect
+        this.flag = true;
+        this.visual.startVisual(this.tasksBlock, this.btn, this.loder, this.input, this.flag);
 
         let inp = this.input.value;
         if (inp !== "") {
+            // debugger;
             this.service.post(this.widgetId, inp) // post on server
-            .then(()=>{
-                this.input.value = null
-                this._tasks.push(new Task(inp)); 
-                this._renderTasks(); 
-            });
-            
+                .then((data) => {
+                    
+                    // visual effect
+                    this.visual.startVisual(this.tasksBlock, this.btn, this.loder, this.input)
+                    
+                    this.input.value = null
+                    const task = new Task(data.task.title, data.task.id, data.task.isDone);
+                    // calback on delete task
+                    task._onTaskDeletedchild = this._onTaskDeleted.bind(this);
+                    // calback on isDone task
+                    task._items_left = this._items_left.bind(this);
+                    // calback on updata task put
+                    task._startPut = this._startTaskPutServer.bind(this);
+                    this._tasks.push(task);
+                    this._renderTasks();
+                });
+
         }
     };
 
     _onTaskDeleted(task) {
         // delete server
-        this.service.delete(this.widgetId, task.id)
-        .then(()=>{
-            // debugger;
-            let deleted = this._tasks.filter( (item)=> {
-                return item != task;
-            });
-            this._tasks = deleted;
-            
-            this._renderTasks(); 
-        });
         // debugger;
-        
+       
+        this.service.delete(this.widgetId, task.id)
+            .then(() => {
+
+                let deleted = this._tasks.filter((item) => {
+                    return item != task;
+                });
+                this._tasks = deleted;
+
+                this._renderTasks();
+            });
+        // debugger;
+
     };
 
     _renderHead() {
@@ -82,11 +108,30 @@ class TodoList {
         }
         this._el = document.querySelector('[data-wrap="wrap1"]');
         this._el.innerHTML = `
+        <p>What to buy</p>
         <div class="head" id="head">
             <form>
-            <p>What to buy</p>
             <input type="text" placeholder="wright net task" class="input" id="input"/>
             <button id="btn" class="btn">+</button>
+            
+            <div class="windows8">
+                <div class="wBall" id="wBall_1">
+                    <div class="wInnerBall"></div>
+                </div>
+                <div class="wBall" id="wBall_2">
+                    <div class="wInnerBall"></div>
+                </div>
+                <div class="wBall" id="wBall_3">
+                    <div class="wInnerBall"></div>
+                </div>
+                <div class="wBall" id="wBall_4">
+                    <div class="wInnerBall"></div>
+                </div>
+                <div class="wBall" id="wBall_5">
+                    <div class="wInnerBall"></div>
+                </div>
+            </div>
+
             </form>
         </div>
         <div data-role="tasks" class="main" id="main">
@@ -98,17 +143,18 @@ class TodoList {
             <button class="compled">Compled</button>
         </div>`;
         this.tasksBlock = this._el.querySelector('[data-role="tasks"]');
-        this.btn = document.querySelector("#btn");
-        this.input = document.querySelector("#input");
-        this.btn.addEventListener("click", this._addTask.bind(this)); // add Tasks
-        this.items_left = document.querySelector(".items-left");
-        this.btn.addEventListener("click", this._items_left.bind(this)); // add Tasks
-        this.all = document.querySelector(".all");
-        this.all.addEventListener("click", this._allTasks.bind(this));
-        this.active = document.querySelector(".active");
-        this.active.addEventListener("click", this._activeTasks.bind(this));
+        this.btn = document.querySelector('#btn');
+        this.input = document.querySelector('#input');
+        this.btn.addEventListener('click', this._addTask.bind(this)); // add Tasks
+        this.items_left = document.querySelector('.items-left');
+        this.btn.addEventListener('click', this._items_left.bind(this)); // add Tasks
+        this.all = document.querySelector('.all');
+        this.all.addEventListener('click', this._allTasks.bind(this));
+        this.active = document.querySelector('.active');
+        this.active.addEventListener('click', this._activeTasks.bind(this));
         this.completed = document.querySelector('.compled');
         this.completed.addEventListener('click', this._completedTasks.bind(this));
+        this.loder = this._el.querySelector('.windows8');
     };
 
     _renderTasks() {
@@ -121,8 +167,8 @@ class TodoList {
             tasksForRender = tasksForRender.filter((item, i, arr) => {
                 return !item.isDone;
             })
-        } else if(this.filterMode == 'completed'){
-            tasksForRender = tasksForRender.filter((item)=>{
+        } else if (this.filterMode == 'completed') {
+            tasksForRender = tasksForRender.filter((item) => {
                 return item.isDone;
             })
         };
@@ -133,17 +179,13 @@ class TodoList {
             let item = tasksForRender[i];
             this.tasksBlock.append(item.render()); // render tasks
             // todo: move to task createion place
-            item._onTaskDeletedchild = this._onTaskDeleted.bind(this); //call
-            // bind on isDone task
-            item._items_left = this._items_left.bind(this);
-            // bind on updata task put
-            item._startPut = this._startTaskPutServer.bind(this);
+
 
             // 
-            if(!item.isDone) {
+            if (!item.isDone) {
                 this.count++;
             };
-            
+
         };
         this.items_left.innerHTML = `${this.count} Items-left`;
         this.count = 0;
@@ -159,7 +201,7 @@ class TodoList {
     _allTasks() {
         // debugger;
         this.filterMode = 'all';
-        this._renderTasks(); 
+        this._renderTasks();
     };
 
     _activeTasks() {
@@ -170,5 +212,5 @@ class TodoList {
     _completedTasks() {
         this.filterMode = 'completed';
         this._renderTasks();
-    };    
+    };
 }

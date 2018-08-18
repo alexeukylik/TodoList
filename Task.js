@@ -16,14 +16,14 @@ class Task {
             return this.div;
         } else {
             this.div = document.createElement('div');
+            this.div.setAttribute('class', 'border')
             this.div.innerHTML = `
-            <div class="border">
                 <label class="label">
                     <input class="checked" type="checkbox" ${ this.isDone ? "checked" : ""} /> 
                     <span>${this.name}</span>
                 </label>
                 <span class="del" data-role="delete">x</span>
-            </div>`;
+            `;
 
             // creat and listener checkbox
             this.checked1 = this.div.querySelector('.checked');
@@ -33,6 +33,8 @@ class Task {
             const deleteButton = this.div.querySelector('[data-role="delete"]');
             deleteButton.addEventListener('click', this._onDelete.bind(this)); //call
 
+            this.div.addEventListener('dblclick', this.fun.bind(this));
+
             // add class If input checked
             if (this.isDone) {
                 this.div.classList.add('check-change');
@@ -41,6 +43,10 @@ class Task {
             return this.div;
         }
     };
+
+    fun() {
+        console.log('start');
+    }
 
     _selected() {
         if (this.checked1.checked) {

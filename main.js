@@ -1,4 +1,5 @@
 const serviceDal = new Service();  //create DALL
-const todoList = new TodoList(serviceDal);
+const visual = new Visual();
+const todoList = new TodoList(serviceDal, visual);
 todoList.render();
 
