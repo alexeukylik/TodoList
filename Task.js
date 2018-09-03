@@ -8,6 +8,7 @@ class Task {
         this._items_left = null;
         this._allTasks = null;
         this.id = id;
+        this.change1 = null;
     }
 
     render() {
@@ -33,7 +34,8 @@ class Task {
             const deleteButton = this.div.querySelector('[data-role="delete"]');
             deleteButton.addEventListener('click', this._onDelete.bind(this)); //call
 
-            this.div.addEventListener('dblclick', this.fun.bind(this));
+            // change inner task
+            this.div.addEventListener('dblclick', this.changeTask.bind(this));
 
             // add class If input checked
             if (this.isDone) {
@@ -44,8 +46,13 @@ class Task {
         }
     };
 
-    fun() {
+    changeTask(e) {
+        // debugger;
         console.log('start');
+        this.div.innerHTML =`<input class="input-change" type="text" value=${this.name}/>` 
+        let input = document.querySelector('.input-change');
+        this.change1(this, e, input);
+
     }
 
     _selected() {

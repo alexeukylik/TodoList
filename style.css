@@ -52,14 +52,6 @@
     text-align: center;
 }
 
-.del:hover {
-    color: red;
-    opacity: 1;
-    transition: 0.05s ease-out 0.1s;
-    border:  1px solid black;
-    box-sizing: border-box;
-    background: gray;
-}
 
 .section:hover * { 
     text-decoration: line-through; 
@@ -79,6 +71,15 @@
 .border:hover {
 	border: 1px solid red;
 
+}
+
+.border:hover .del {
+	color: red;
+    opacity: 1;
+    transition: 0.05s ease-out 0.1s;
+    border:  1px solid black;
+    box-sizing: border-box;
+    background: gray;
 }
 
 .border label:hover {    
@@ -109,6 +110,11 @@
     width: 80px;
     text-align: center;
     cursor: pointer;
+}
+
+.input-change {
+	width: 100%;	
+	box-sizing: border-box;
 }
 
 /* lodinig */

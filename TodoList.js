@@ -16,6 +16,7 @@ class TodoList {
         this.service = service;  //create DALL
         this.visual = visual; //visual effect
 
+
         // сallback on get responce
         this.service.pushAddServerCallback = this._startTaskAddServer.bind(this);
         this.service.get(this.widgetId);
@@ -26,6 +27,8 @@ class TodoList {
     _startTaskAddServer(taskOutServer) {
         taskOutServer.map((item) => {
             const task = new Task(item.title, item.id, item.done);
+            // callback change task on input in text
+            task.change1 = this.enterTaskInnerInput.bind(this);
             // callback on delete task
             task._onTaskDeletedchild = this._onTaskDeleted.bind(this);
             // calback on isDone task
@@ -51,19 +54,22 @@ class TodoList {
     _addTask(event) {
         //stoped update
         event.preventDefault();
-        // debugger;
-        // visual effect
-        this.flag = true;
-        this.visual.startVisual(this.tasksBlock, this.btn, this.loder, this.input, this.flag);
+        
 
         let inp = this.input.value;
         if (inp !== "") {
             // debugger;
+            // visual effect
+            this.flag = true;
+            this.visual.startVisual(this.tasksBlock, this.btn, this.loder, this.input, this.flag);
+
+            // debugger;
             this.service.post(this.widgetId, inp) // post on server
-                .then((data) => {
-                    
+                .then((data) => {    
+                    debugger;                
                     // visual effect
-                    this.visual.startVisual(this.tasksBlock, this.btn, this.loder, this.input)
+                    this.flag = false;
+                    this.visual.startVisual(this.tasksBlock, this.btn, this.loder, this.input, this.flag)
                     
                     this.input.value = null
                     const task = new Task(data.task.title, data.task.id, data.task.isDone);
@@ -83,9 +89,13 @@ class TodoList {
     _onTaskDeleted(task) {
         // delete server
         // debugger;
+        this.flag = true;
+        this.visual.startVisual(this.tasksBlock, this.btn, this.loder, this.input, this.flag);
        
         this.service.delete(this.widgetId, task.id)
             .then(() => {
+                this.flag = false;
+                this.visual.startVisual(this.tasksBlock, this.btn, this.loder, this.input, this.flag);
 
                 let deleted = this._tasks.filter((item) => {
                     return item != task;
@@ -94,8 +104,6 @@ class TodoList {
 
                 this._renderTasks();
             });
-        // debugger;
-
     };
 
     _renderHead() {
@@ -155,6 +163,7 @@ class TodoList {
         this.completed = document.querySelector('.compled');
         this.completed.addEventListener('click', this._completedTasks.bind(this));
         this.loder = this._el.querySelector('.windows8');
+        // this._el.addEventListener('click', this.enterTaskInnerInput.bind(this));
     };
 
     _renderTasks() {
@@ -164,12 +173,14 @@ class TodoList {
         let tasksForRender = this._tasks;
 
         if (this.filterMode == 'active') {
-            tasksForRender = tasksForRender.filter((item, i, arr) => {
+            tasksForRender = tasksForRender.filter((item) => {
                 return !item.isDone;
             })
         } else if (this.filterMode == 'completed') {
+            // debugger;
             tasksForRender = tasksForRender.filter((item) => {
-                return item.isDone;
+                this.count++;
+                return !item;
             })
         };
 
@@ -182,15 +193,22 @@ class TodoList {
 
 
             // 
-            if (!item.isDone) {
+            if (!item.isDone || this.filterMode !== 'completed') {
                 this.count++;
             };
+           
 
         };
         this.items_left.innerHTML = `${this.count} Items-left`;
         this.count = 0;
-        var serialItems = JSON.stringify(this._tasks);
-        localStorage.setItem("key", serialItems);
+        // var serialItems = JSON.stringify(this._tasks);
+        // localStorage.setItem("key", serialItems);
+    };
+
+    enterTaskInnerInput(task, e, input) {
+        // debugger;
+        this._addTask(input, e);
+        
     };
 
     // isDone tasks

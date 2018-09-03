@@ -10,8 +10,7 @@ class Service {
             method: 'get',
             mode: 'cors',
 
-        })
-           
+        })           
             .then(data => data.json())
             .then((data) => {
                 console.log(data);
@@ -20,21 +19,15 @@ class Service {
                 })
             })
             .then(()=>{
-                console.log(this.idServer);
-                
-
+                console.log(this.idServer); 
             })
             .then(() => {
                 this.pushAddServerCallback(this.idServer);
-
             });
-
     };
 
 
     post(widgetId, title) {
-        // debugger; 
-        
         const data = new URLSearchParams()
 
         data.append('widgetId', widgetId);
@@ -46,7 +39,6 @@ class Service {
             // headers: {'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             // 'accept': 'application/json'},
             mode: 'cors',
-
         })
             .then((res) => {
                 return res.json()
@@ -54,8 +46,7 @@ class Service {
             .then((data) => {
                 console.log(data);
                 return data;
-            })
-        
+            })        
     };
 
     put(widgetId, taskId, title, done) {
