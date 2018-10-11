@@ -1,9 +1,5 @@
 class Visual {
-  constructor() {
-
-  }
-
-  startVisual(tasksBlock, btn, loder, input, flag) {
+   startVisual(tasksBlock, btn, loder, input, flag) {
     if (flag) {
         tasksBlock.style.display = "none";
         btn.style.display = "none";
@@ -15,7 +11,5 @@ class Visual {
         btn.style.display = 'inline-block';
         loder.style.display = 'none';
     }
-  }
-
-  
+  }  
 }

@@ -12,7 +12,6 @@ class Task {
     }
 
     render() {
-        // debugger;
         if (this.div) {
             return this.div;
         } else {
@@ -47,8 +46,6 @@ class Task {
     };
 
     changeTask(e) {
-        // debugger;
-        console.log('start');
         this.div.innerHTML =`<input class="input-change" type="text" value=${this.name}/>` 
         let input = document.querySelector('.input-change');
         this.change1(this, e, input);

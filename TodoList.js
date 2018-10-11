@@ -1,6 +1,5 @@
 class TodoList {
     constructor(service, visual) {
-        // debugger;
         this._tasks = []; //new Task('number1'), new Task('number2')
         this._el = null; // wrap aplication
         this.btn = null; // button for enter task
@@ -58,12 +57,10 @@ class TodoList {
 
         let inp = this.input.value;
         if (inp !== "") {
-            // debugger;
             // visual effect
             this.flag = true;
             this.visual.startVisual(this.tasksBlock, this.btn, this.loder, this.input, this.flag);
 
-            // debugger;
             this.service.post(this.widgetId, inp) // post on server
                 .then((data) => {    
                     debugger;                
@@ -88,7 +85,6 @@ class TodoList {
 
     _onTaskDeleted(task) {
         // delete server
-        // debugger;
         this.flag = true;
         this.visual.startVisual(this.tasksBlock, this.btn, this.loder, this.input, this.flag);
        
@@ -107,7 +103,6 @@ class TodoList {
     };
 
     _renderHead() {
-        // this.divWrap ==null
         if (!this.divWrap) {
             this.divWrap = document.createElement("div");
             this.divWrap.setAttribute("data-wrap", "wrap1");
@@ -167,7 +162,6 @@ class TodoList {
     };
 
     _renderTasks() {
-        // debugger;
         this.count = 0;
 
         let tasksForRender = this._tasks;
@@ -177,14 +171,13 @@ class TodoList {
                 return !item.isDone;
             })
         } else if (this.filterMode == 'completed') {
-            // debugger;
             tasksForRender = tasksForRender.filter((item) => {
                 this.count++;
                 return !item;
             })
         };
 
-        this.tasksBlock.innerHTML = ""; // очистим от старого
+        this.tasksBlock.innerHTML = ""; 
 
         for (let i = 0; i < tasksForRender.length; i++) {
             let item = tasksForRender[i];
@@ -206,9 +199,7 @@ class TodoList {
     };
 
     enterTaskInnerInput(task, e, input) {
-        // debugger;
-        this._addTask(input, e);
-        
+        this._addTask(input, e);        
     };
 
     // isDone tasks
@@ -217,7 +208,6 @@ class TodoList {
     };
 
     _allTasks() {
-        // debugger;
         this.filterMode = 'all';
         this._renderTasks();
     };

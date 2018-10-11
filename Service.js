@@ -2,15 +2,13 @@ class Service {
     constructor() {
         this.idServer = null;
     };
-
     
     get(widgetId) {
-        // debugger;
         fetch(`https://repetitora.net/api/JS/Tasks?widgetId=${widgetId}&page=1&count=10`, {
             method: 'get',
             mode: 'cors',
 
-        })           
+        })  
             .then(data => data.json())
             .then((data) => {
                 console.log(data);
@@ -25,7 +23,6 @@ class Service {
                 this.pushAddServerCallback(this.idServer);
             });
     };
-
 
     post(widgetId, title) {
         const data = new URLSearchParams()
@@ -72,7 +69,6 @@ class Service {
     };
 
     delete(widgetId, taskId) {
-        // debugger;
         const data = new URLSearchParams()
 
         data.append('widgetId', widgetId);
